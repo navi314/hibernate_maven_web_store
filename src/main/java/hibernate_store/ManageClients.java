@@ -612,35 +612,4 @@ public class ManageClients {
 		}
 
 	}
-
-	// Create list of Credit Cards
-	/*
-	 * Set<CreditCard> credit = new HashSet<CreditCard>(); CreditCard card = new
-	 * CreditCard("1231312","Cardholder name", ME.getCardType(1)); credit.add(card);
-	 */
-	// Random rand = new Random();
-	// City city = ME.getCitybyID(1);
-	// System.out.println(city.getName());
-	// ME.addCreditCard(1, "Ivan Martinez", "123456789",ME.getCardType(1));
-	// ME.listDeliveryAddress(1);
-	// ME.listCreditCards(1);
-	// ME.listArticles();
-	// ME.listDeliveryPackages();
-
-	// SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-	// System.out.println("ID de billing:
-	// "+ME.addBilling(ME.createRandom(),rand.nextInt(250),date));
-	// ME.listBilling();
-	// ME.listPurchaseOrders();
-	// ME.addPurchaseOrder(1, date, 1, 36, 1);
-// Set<Articles> articleList = new HashSet<Articles>();
-// articleList.add(ME.searchArticle(1));
-// articleList.add(ME.searchArticle(2));
-// articleList.add(ME.searchArticle(3));
-// articleList.add(ME.searchArticle(4));
-// for (Iterator iterator2 = articleList.iterator(); iterator2.hasNext();) {
-// 	Articles Articles = (Articles) iterator2.next();
-//		System.out.println("--" + Articles.getName());
-//	} 
-
 }

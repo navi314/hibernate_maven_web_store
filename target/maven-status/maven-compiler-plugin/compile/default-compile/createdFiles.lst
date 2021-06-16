@@ -8,7 +8,6 @@ order\ArticleList.class
 hibernate_maven\App.class
 client\CardType.class
 delivery\Country.class
-hibernate_store\Main.class
 hibernate_store\ManageClients.class
 client\CreditCard.class
 client\ClientCards.class
