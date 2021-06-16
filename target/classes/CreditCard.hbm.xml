@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "client.CreditCard" table = "CREDITCARD">
+      
+      <meta attribute = "class-description">
+         This class contains the credit card information. 
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <!-- <property name = "cardTypeID" column = "cardTypeID" type = "int"/> -->
+      <property name = "cardHolder" column = "cardholder" type = "string"/>
+      <property name = "cardNumber" column = "cardNumber" type = "string"/>
+      
+      <many-to-one name = "cardTypeID" column = "cardTypeID" unique="true"
+         class="client.CardType" not-null="true"/>
+      
+      <set name="clientsAdd" table="clientcards" cascade="all">
+            <key column="creditID"/>
+            <many-to-many column="clientID" class="client.Clients"/>
+      </set>
+   </class>
+</hibernate-mapping>

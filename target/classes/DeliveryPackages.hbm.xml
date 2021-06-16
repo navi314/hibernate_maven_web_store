@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "delivery.DeliveryPackages" table = "DELIVERYPACKAGES">
+      
+      <meta attribute = "class-description">
+         This class contains the DELIVERYPACKAGES
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "deliveryDate" column = "deliveryDate" type = "timestamp"/>
+      <property name = "packageNumber" column = "packageNumber" type = "integer"/>
+      <!-- <property name = "cityID" column = "cityID" type = "integer"/> -->
+      
+      <many-to-one name = "company" column = "companyID" 
+         class="order.Company" not-null="true"/>
+   </class>
+</hibernate-mapping>

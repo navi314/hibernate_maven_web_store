@@ -1,0 +1,34 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "delivery.DeliveryAddress" table = "DELIVERYADDRESS">
+      
+      <meta attribute = "class-description">
+         This class contains the client delivery address.
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "street" column = "street" type = "string"/>
+      <property name = "number" column = "number" type = "integer"/>
+      <!-- <property name = "cityID" column = "cityID" type = "integer"/> -->
+      
+      <many-to-one name = "cityID" column = "cityID" 
+         class="delivery.City" not-null="true"/>
+      
+      <set name="clientsAdd" table="clientdeliveryaddress" inverse="true" lazy="true" fetch="select">
+            <key column="deliveryAddressID"/>
+            <many-to-many column="clientID" class="client.Clients" />
+      </set>
+        <many-to-one name = "stateID" column = "stateID" 
+         class="delivery.State" not-null="true"/>
+         
+      <many-to-one name = "countryID" column = "countryID" 
+         class="delivery.Country" not-null="true"/>
+   </class>
+</hibernate-mapping>

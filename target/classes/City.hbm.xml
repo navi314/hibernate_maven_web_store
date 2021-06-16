@@ -1,0 +1,23 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "delivery.City" table = "CITY">
+      
+      <meta attribute = "class-description">
+         This class contains the STATE information. 
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      <property name = "name" column = "name" type = "string"/>
+      
+      <set name="state_id" table="citystate" cascade="all">
+            <key column="stateID"/>
+            <many-to-many column="cityID" class="delivery.State" />
+      </set>
+   </class>
+</hibernate-mapping>

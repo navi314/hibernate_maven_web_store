@@ -1,0 +1,39 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "client.Clients" table = "CLIENTS">
+      
+      <meta attribute = "class-description">
+         This class contains the client detail. 
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "userName" column = "userName" type = "string"/>
+      <property name = "lastName" column = "lastName" type = "string"/>
+      <property name = "password" column = "PASSWORD" type = "string"/>
+      <property name = "email" column = "email" type = "string"/>
+      <property name = "name" column = "name" type = "string"/>
+      
+      <set name="deliveryAddress" table="clientdeliveryaddress" cascade="all">
+            <key column="clientID"/>
+            <many-to-many column="deliveryAddressID" class="delivery.DeliveryAddress" />
+      </set>
+      
+      <set name="creditCards" table="clientcards" cascade="all">
+            <key column="clientID"/>
+            <many-to-many column="creditID" class="client.CreditCard"/>
+      </set>
+      
+      <set name="purchase" table="clientpurchase" cascade="all">
+            <key column="clientID"/>
+            <many-to-many column="purchaseOrderID" class="order.PurchaseOrder"/>
+      </set>
+
+   </class>
+</hibernate-mapping>

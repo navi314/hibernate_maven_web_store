@@ -1,5 +1,5 @@
 package hibernate_maven;
 
-public class cliente {
+public class AppTest {
 
 }
