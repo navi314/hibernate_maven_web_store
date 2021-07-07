@@ -255,14 +255,17 @@ public class ManageClients {
 		return card;
 	}
 
-	public void addCreditCard(int clientID, String cardHolder, String number, CardType cardtype) {
+	public String addCreditCard(int clientID, String cardHolder, String number, CardType cardtype) {
 		Session session = factory.openSession();
 		Transaction tx = null;
-
+		System.out.println("ID"+clientID);
 		try {
 			tx = session.beginTransaction();
 			List clients = session.createQuery("FROM client.Clients WHERE ID=:id").setParameter("id", clientID)
 					.list();
+			if(clients.isEmpty()) {
+				return "Error";
+			}
 			for (Iterator iterator1 = clients.iterator(); iterator1.hasNext();) {
 				Clients client = (Clients) iterator1.next();
 				CreditCard card = new CreditCard();
@@ -276,12 +279,14 @@ public class ManageClients {
 			if (tx.getStatus().equals(TransactionStatus.ACTIVE)) {
 				tx.commit();
 			}
-//			System.out.println("Se agrego la tarjeta al cliente");
+			return "Se agrego la tarjeta al cliente";
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
-		} finally {
+			return "Error";
+		}
+		finally {
 			session.close();
 		}
 	}
@@ -359,6 +364,40 @@ public class ManageClients {
 			session.close();
 		}
 	}
+	
+//	public int getListCreditCards(int clientID) {
+//		Session session = factory.openSession();
+//		Transaction tx = null;
+//		int lenght = 0;
+//		try {
+//			tx = session.beginTransaction();
+//
+//			List employees = session.createQuery("FROM client.Clients WHERE ID=:id")
+//					.setParameter("id", clientID).list();
+//			for (Iterator iterator1 = employees.iterator(); iterator1.hasNext();) {
+//				Clients client = (Clients) iterator1.next();
+//				Set creditCards = client.getCreditCards();
+//				session.update(client);
+//
+//				for (Iterator iterator2 = creditCards.iterator(); iterator2.hasNext();) {
+//					CreditCard card = (CreditCard) iterator2.next();
+//					lenght++;
+//				}
+//
+//			}
+//
+//			if (tx.getStatus().equals(TransactionStatus.ACTIVE)) {
+//				tx.commit();
+//			}
+//		} catch (HibernateException e) {
+//			if (tx != null)
+//				tx.rollback();
+//			e.printStackTrace();
+//		} finally {
+//			session.close();
+//		}
+//		return lenght;
+//	}
 
 	public void listArticles() {
 		Session session = factory.openSession();

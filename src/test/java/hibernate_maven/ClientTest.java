@@ -10,7 +10,7 @@ import org.junit.Test;
 import delivery.DeliveryAddress;
 import hibernate_store.ManageClients;
 
-public class JUnitTest {
+public class ClientTest {
 	
 	// test case
 	@Test
@@ -33,25 +33,12 @@ public class JUnitTest {
 		delivery.add(delAdd2);
 
 		// Create a new Client
-		int ID = ME.addClient("Marlen4", "Estrada", "user", "password", "correo2@correo.com", delivery);
-		
+		int ID = ME.addClient("Juan", "Estrada", "user", "password", "correo2@correo.com", delivery);
 		//Check that an object isn't null
 		assertNotNull(ID);
 	}
 	
-	@Test
-	public void cardTest() {
-		ManageClients ME = new ManageClients();
-		try {
-			ManageClients.factory = new Configuration().configure().buildSessionFactory();
-		} catch (Throwable ex) {
-			System.err.println("Failed to create sessionFactory object." + ex);
-			throw new ExceptionInInitializerError(ex);
-		}
-		int ID = 1;
-		ME.addCreditCard(ID, "Marlen Estrada 4", "123456789", ME.getCardType(1));
-		assertNotNull(ID);
-	}
+	
 	
 
 }

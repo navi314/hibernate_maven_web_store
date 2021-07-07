@@ -12,6 +12,7 @@ import hibernate_store.ManageClients;
 import order.Articles;
 
 public class App {
+	/**
 	public static void main(String[] args) {
 		try {
 			ManageClients.factory = new Configuration().configure().buildSessionFactory();
@@ -75,4 +76,5 @@ public class App {
 		// Amount paid by the Client
 		System.out.println("Cantidad: " + amount);
 	}
+	*/
 }
