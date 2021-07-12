@@ -1,15 +1,23 @@
 package hibernate_maven;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.cfg.Configuration;
 import org.junit.Test;
 
 import hibernate_store.ManageClients;
+import order.Articles;
+import order.Company;
 
-public class CreditCardTest {
+public class TestDeliveryPackages {
 	@Test
-	public void cardTest() {
+	public void addDeliveryPackage() {
 		ManageClients ME = new ManageClients();
 		try {
 			ManageClients.factory = new Configuration().configure().buildSessionFactory();
@@ -17,13 +25,13 @@ public class CreditCardTest {
 			System.err.println("Failed to create sessionFactory object." + ex);
 			throw new ExceptionInInitializerError(ex);
 		}
-		int ID = 1;
-		String result = ME.addCreditCard(ID, "Marlen Estrada 4", "123456789", ME.getCardType(1));
-		assertEquals("Se agrego la tarjeta al cliente",result);
+		Date date = new Date();
+		int deliPackage = ME.addDeliveryPackages(date, ME.createRandom(), ME.getCompany(1));
+		assertNotNull(deliPackage);
 	}
 	
 	@Test
-	public void cardTestFail() {
+	public void addDeliveryPackageFail() {
 		ManageClients ME = new ManageClients();
 		try {
 			ManageClients.factory = new Configuration().configure().buildSessionFactory();
@@ -31,8 +39,9 @@ public class CreditCardTest {
 			System.err.println("Failed to create sessionFactory object." + ex);
 			throw new ExceptionInInitializerError(ex);
 		}
-
-		String result = ME.addCreditCard(99, "Marlen Estrada", "723456789", ME.getCardType(2));
-		assertEquals("Error",result);
+		Date date = new Date();
+		Company company = ME.getCompany(999);
+		//int deliPackage = ME.addDeliveryPackages(date, ME.createRandom(), company);
+		assertNull(company);
 	}
 }

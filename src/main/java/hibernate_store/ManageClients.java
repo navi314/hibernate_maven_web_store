@@ -81,7 +81,11 @@ public class ManageClients {
 		int total = 0;
 		for (Iterator iterator2 = articleList.iterator(); iterator2.hasNext();) {
 			Articles Articles = (Articles) iterator2.next();
-			total += Articles.getPrice();
+			try {
+				total += Articles.getPrice();
+			}catch(Exception e){
+				return 0;
+			}
 		}
 		return total;
 	}
@@ -161,7 +165,7 @@ public class ManageClients {
 		return clientID;
 	}
 
-	public void addDeliveryAddress(int clientID, String street, int number, City cityID, State stateID, Country countryID) {
+	public String addDeliveryAddress(int clientID, String street, int number, City cityID, State stateID, Country countryID) {
 		Session session = factory.openSession();
 		Transaction tx = null;
 		Integer deliveryAddress = null;
@@ -171,6 +175,9 @@ public class ManageClients {
 			tx = session.beginTransaction();
 			List employees = session.createQuery("FROM client.Clients WHERE ID=:id")
 					.setParameter("id", clientID).list();
+			if(employees.isEmpty()) {
+				return "Error";
+			}
 			for (Iterator iterator1 = employees.iterator(); iterator1.hasNext();) {
 				Clients employee = (Clients) iterator1.next();
 				DeliveryAddress delAdd = new DeliveryAddress();
@@ -188,10 +195,12 @@ public class ManageClients {
 			if (tx.getStatus().equals(TransactionStatus.ACTIVE)) {
 				tx.commit();
 			}
+			return "Se agrego la direccion";
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
+			return "Error";
 		} finally {
 			session.close();
 		}
@@ -557,6 +566,9 @@ public class ManageClients {
 			tx = session.beginTransaction();
 			List clients = session.createQuery("FROM client.Clients WHERE ID=:id").setParameter("id", clientID)
 					.list();
+			if(clients.isEmpty()) {
+				return 0;
+			}
 			Iterator iterator1 = clients.iterator();
 			Clients client = (Clients) iterator1.next();
 			Set clientsDelivery = client.getDeliveryAddress();
@@ -611,13 +623,16 @@ public class ManageClients {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
-		} finally {
+		}catch(NullPointerException e){
+			return company;
+		}
+		finally {
 			session.close();
 		}
 		return company;
 	}
 
-	public void addPurchaseOrder(int billingID, Date purchaseDate, int deliveryPackageID, int deliveryAddressID,
+	public String addPurchaseOrder(int billingID, Date purchaseDate, int deliveryPackageID, int deliveryAddressID,
 			int clientID, Set<Articles> articleList) {
 		Session session = factory.openSession();
 		Transaction tx = null;
@@ -630,7 +645,11 @@ public class ManageClients {
 			Clients client = (Clients) session.get(Clients.class, clientID);
 			DeliveryPackages deliveryPackage = (DeliveryPackages) session.get(DeliveryPackages.class,deliveryPackageID);
 			DeliveryAddress address = (DeliveryAddress) session.get(DeliveryAddress.class, clientID);
-
+			
+			if(bill == null || client == null || deliveryPackage == null || address == null) {
+				return "Error";
+			}
+			
 			purchase.setBillingID(bill);
 			purchase.setPurchaseDate(purchaseDate);
 			purchase.setDeliveryAddress(address);
@@ -641,14 +660,17 @@ public class ManageClients {
 			purchaseID = (Integer) session.save(purchase);
 
 			tx.commit();
-			System.out.println("Termino");
+			return "Termino";
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
-		} finally {
+		}catch (Exception e) {
+			return "Error";
+		}
+		finally {
 			session.close();
 		}
-
+		return "Error";
 	}
 }

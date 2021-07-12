@@ -6,8 +6,13 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({
-   ClientTest.class,
-   CreditCardTest.class
+   TestClient.class,
+   TestCreditCard.class,
+   TestDeliveryAddress.class,
+   TestArticle.class,
+   TestBilling.class,
+   TestDeliveryPackages.class,
+   TestPurchaseOrder.class
 })
 
 public class TestSuite {   
