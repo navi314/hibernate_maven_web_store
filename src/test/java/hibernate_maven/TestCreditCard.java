@@ -32,7 +32,7 @@ public class TestCreditCard {
 			throw new ExceptionInInitializerError(ex);
 		}
 
-		String result = ME.addCreditCard(99, "Marlen Estrada", "723456789", ME.getCardType(2));
+		String result = ME.addCreditCard(999, "Marlen Estrada", "723456789", ME.getCardType(2));
 		assertEquals("Error",result);
 	}
 }

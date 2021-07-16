@@ -123,6 +123,9 @@ public class ManageClients {
 		try {
 			tx = session.beginTransaction();
 			city = (City) session.get(City.class, ID);
+			if(city==null) {
+				return null;
+			}
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
