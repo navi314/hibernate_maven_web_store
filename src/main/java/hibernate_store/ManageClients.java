@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -23,6 +25,7 @@ import delivery.Country;
 import delivery.DeliveryAddress;
 import delivery.DeliveryPackages;
 import delivery.State;
+import hibernate_maven.log4jExample;
 import order.Articles;
 import order.Billing;
 import order.Company;
@@ -30,6 +33,7 @@ import order.PurchaseOrder;
 
 public class ManageClients {
 	public static SessionFactory factory;
+	private static final Logger log = LogManager.getLogger(ManageClients.class);
 
 	public State getStatebyID(int ID) {
 		State state = new State();
@@ -84,9 +88,11 @@ public class ManageClients {
 			try {
 				total += Articles.getPrice();
 			}catch(Exception e){
+				log.error("[getAmount] Error al consultar la cantidad a pagar por el cliente");
 				return 0;
 			}
 		}
+		log.info("[getAmount] Se consulto la cantidad que va a pagar el cliente");
 		return total;
 	}
 
@@ -98,10 +104,12 @@ public class ManageClients {
 			tx = session.beginTransaction();
 			article = (Articles) session.get(Articles.class, ID);
 			tx.commit();
+			log.info("[searchArticle] Se consulto la información de un articulo");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
+			log.error("[searchArticle] Error al consultar un articulo");
 		} finally {
 			session.close();
 		}
@@ -158,10 +166,12 @@ public class ManageClients {
 			// client.setCreditCards(credit);
 
 			tx.commit();
+			log.info("[addClient] Usuario "+ clientID +" fue creado.");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
+			log.info("[addClient] Error al momento de crear usuario");
 		} finally {
 			session.close();
 		}
@@ -179,6 +189,7 @@ public class ManageClients {
 			List employees = session.createQuery("FROM client.Clients WHERE ID=:id")
 					.setParameter("id", clientID).list();
 			if(employees.isEmpty()) {
+				log.error("[addDeliveryAddress] No se encontro al cliente");
 				return "Error";
 			}
 			for (Iterator iterator1 = employees.iterator(); iterator1.hasNext();) {
@@ -198,11 +209,13 @@ public class ManageClients {
 			if (tx.getStatus().equals(TransactionStatus.ACTIVE)) {
 				tx.commit();
 			}
+			log.info("[addDeliveryAddress] Se agrego la direccion al cliente");
 			return "Se agrego la direccion";
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
+			log.error("[addDeliveryAddress] Error al agregar dirección al cliente");
 			return "Error";
 		} finally {
 			session.close();
@@ -219,10 +232,12 @@ public class ManageClients {
 			tx = session.beginTransaction();
 			client = (Clients) session.get(Clients.class, ID);
 			tx.commit();
+			log.info("[getClientByID] Se consulto la información del cliente");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
+			log.error("[getClientByID] Error al consultar al cliente");
 		} finally {
 			session.close();
 		}
@@ -270,12 +285,13 @@ public class ManageClients {
 	public String addCreditCard(int clientID, String cardHolder, String number, CardType cardtype) {
 		Session session = factory.openSession();
 		Transaction tx = null;
-		System.out.println("ID"+clientID);
+		//System.out.println("ID"+clientID);
 		try {
 			tx = session.beginTransaction();
 			List clients = session.createQuery("FROM client.Clients WHERE ID=:id").setParameter("id", clientID)
 					.list();
 			if(clients.isEmpty()) {
+				log.error("[addCreditCard] Cliente no encontrado");
 				return "Error";
 			}
 			for (Iterator iterator1 = clients.iterator(); iterator1.hasNext();) {
@@ -291,11 +307,13 @@ public class ManageClients {
 			if (tx.getStatus().equals(TransactionStatus.ACTIVE)) {
 				tx.commit();
 			}
+			log.info("[addCreditCard] Se agrego la tarjeta al cliente");
 			return "Se agrego la tarjeta al cliente";
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
+			log.error("[addCreditCard] Error al momento de agregar la tarjeta al cliente");
 			return "Error";
 		}
 		finally {
@@ -509,10 +527,12 @@ public class ManageClients {
 
 			billingID = (Integer) session.save(billing);
 			tx.commit();
+			log.info("[addBilling] Se creo un nuevo Bill");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
+			log.error("[addBilling] Error al crear el Bill");
 		} finally {
 			session.close();
 		}
@@ -578,10 +598,12 @@ public class ManageClients {
 			Iterator iterator2 = clientsDelivery.iterator();
 			DeliveryAddress delivery = (DeliveryAddress) iterator2.next();
 			deliveryID = delivery.getId();
+			log.info("[getDeliveryAddress] Se consulto la dirección del cliente");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
+			log.error("[getDeliveryAddress] Error al consultar la dirección del cliente");
 		} finally {
 			session.close();
 		}
@@ -603,10 +625,12 @@ public class ManageClients {
 
 			packageID = (Integer) session.save(packages);
 			tx.commit();
+			log.info("[addDeliveryPackages] Se agrego una nueva paqueteria al cliente");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
+			log.error("[addDeliveryPackages] Error al agregar una paqueteria");
 		} finally {
 			session.close();
 		}
@@ -649,9 +673,27 @@ public class ManageClients {
 			DeliveryPackages deliveryPackage = (DeliveryPackages) session.get(DeliveryPackages.class,deliveryPackageID);
 			DeliveryAddress address = (DeliveryAddress) session.get(DeliveryAddress.class, clientID);
 			
-			if(bill == null || client == null || deliveryPackage == null || address == null) {
+			if(bill == null ) {
+				log.error("[addPurchaseOrder] Error no se obtuvo el bill");
 				return "Error";
 			}
+			if(client == null ) {
+				log.error("[addPurchaseOrder] Error no se obtuvo el cliente");
+				return "Error";
+			}			
+			if(deliveryPackage == null ) {
+				log.error("[addPurchaseOrder] Error no se obtuvo el delivery package");
+				return "Error";
+			}
+			if(address == null ) {
+				log.error("[addPurchaseOrder] Error no se obtuvo la direccion");
+				return "Error";
+			}
+			
+//			if(bill == null || client == null || deliveryPackage == null || address == null) {
+//				log.error("[addPurchaseOrder] Error al momento de obtener alguno de los datos para la Orden");
+//				return "Error";
+//			}
 			
 			purchase.setBillingID(bill);
 			purchase.setPurchaseDate(purchaseDate);
@@ -663,12 +705,14 @@ public class ManageClients {
 			purchaseID = (Integer) session.save(purchase);
 
 			tx.commit();
+			log.info("[addPurchaseOrder] Se agrego una nueva orden con ID:"+purchaseID);
 			return "Termino";
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
 		}catch (Exception e) {
+			log.error("[addPurchaseOrder] Error al crear la Orden");
 			return "Error";
 		}
 		finally {

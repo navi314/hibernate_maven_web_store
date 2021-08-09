@@ -1,1 +1,9 @@
-hibernate_maven\AppTest.class
+hibernate_maven\TestDeliveryPackages.class
+hibernate_maven\TestArticle.class
+hibernate_maven\TestSuite.class
+hibernate_maven\TestDeliveryAddress.class
+hibernate_maven\TestRunner.class
+hibernate_maven\TestClient.class
+hibernate_maven\TestPurchaseOrder.class
+hibernate_maven\TestBilling.class
+hibernate_maven\TestCreditCard.class
